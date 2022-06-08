@@ -6,15 +6,6 @@ using Quaternions
 using Statistics
 using XLSX
 
-# integrates the values
-function integrate(value, h)
-    value_list = [0.0]
-    for i = 2:length(roll)
-        push!(value_list, value_list[i-1] + value[i] * h)
-    end
-    return value_list
-end
-
 # Load data
 xf = XLSX.readxlsx("data.xlsx")
 sh = xf["Sheet1"]
@@ -27,10 +18,6 @@ yaw = data[:, :3]
 x = data[:, :4]
 y = data[:, :5]
 z = data[:, :6]
-
-euler_roll = integrate(roll, 1 / 100)
-euler_pitch = integrate(pitch, 1 / 100)
-euler_yaw = integrate(yaw, 1 / 100)
 
 g = 9.81
 acc_roll = []
@@ -83,7 +70,7 @@ output = []
 HT = transpose(H)
 
 dt = 1 / 100
-for k in 1:length(euler_pitch)
+for k in 1:length(pitch)
     x = [0 roll[k] pitch[k] yaw[k]]
 
     A = I + (dt / 2) * [x[1] -x[2] -x[3] -x[4]
